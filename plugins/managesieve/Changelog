@@ -9,6 +9,10 @@
 - Fix bug where activation of forward/vacation rule could activate a wrong script (#7423)
 - Fix bug where forward/vacation rule could end up being duplicated (#7349)
 
+* version 9.4 [2020-03-15]
+-----------------------------------------------------------
+- Basic support for fileinto :create, UI to be enhanced (#7835)
+
 * version 9.3 [2019-04-21]
 -----------------------------------------------------------
 - Use RFC-compliant line endings, CRLF instead of LF (#6686)

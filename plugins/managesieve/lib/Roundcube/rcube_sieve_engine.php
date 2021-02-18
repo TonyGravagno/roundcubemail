@@ -1041,6 +1041,9 @@ class rcube_sieve_engine
 
             $i = 0;
             // actions
+            $option_to_create_folders = "y"; // temporarily hardcode option to use fileinfo_create
+            $opt_fileinto_create = (!empty($option_to_create_folders) && $option_to_create_folders == "y");
+
             foreach ($act_types as $idx => $type) {
                 $type = $this->strip_value($type);
 
@@ -1055,7 +1058,29 @@ class rcube_sieve_engine
                         $this->form['actions'][$i]['copy'] = true;
                     }
                     break;
+                case 'fileinto_create':
+                    // Temorary? Only allow fileinto :create if option allows it
+                    if (!$opt_fileinto_create) {
+                        break;
+                    }
+                    // Get the raw text target specified
+                    $target = $this->strip_value($act_targets[$idx]);
+                    /**
+                     * massage the target here into a standard format.
+                     * periods delimit folder levels: first 0.second 1.third 2
+                     */
+                    $target = str_replace("\\", ".", $target);
+                    $target = str_replace("/", ".", $target);
 
+                        // Save reformatted target back into form
+                    $this->form['actions'][$i]['target'] = $target;
+                    if ($target == '') {
+                        $this->errors['actions'][$i]['target'] = $this->plugin->gettext('cannotbeempty');
+                    }
+                    // Look into support for :create + :copy
+                    $type = 'fileinto';
+                    $this->form['actions'][$i]['create'] = true;
+                    break;
                 case 'reject':
                 case 'ereject':
                     $target = $this->strip_value($area_targets[$idx]);
@@ -2293,6 +2318,7 @@ class rcube_sieve_engine
         if (in_array('fileinto', $this->exts)) {
             $select_action->add($this->plugin->gettext('messagemoveto'), 'fileinto');
         }
+        // no message change for fileinto + create
         if (in_array('fileinto', $this->exts) && in_array('copy', $this->exts)) {
             $select_action->add($this->plugin->gettext('messagecopyto'), 'fileinto_copy');
         }
@@ -2331,6 +2357,10 @@ class rcube_sieve_engine
         $select_type = $action['type'];
         if (in_array($action['type'], ['fileinto', 'redirect']) && !empty($action['copy'])) {
             $select_type .= '_copy';
+        }
+        // this could be fileinto_copy_create
+        if ($select_type == 'fileinto' && !empty($action['create'])) {
+            $select_type .= '_create';
         }
 
         $out .= $select_action->show($select_type);

@@ -427,6 +427,10 @@ class rcube_sieve_script
                             $action_script .= ':copy ';
                             array_push($exts, 'copy');
                         }
+                        if (!empty($action['create'])) {
+                            $action_script .= ':create ';
+                            array_push($exts, 'create');
+                        }
                         $action_script .= self::escape_string($action['target']);
                         break;
 
@@ -960,7 +964,7 @@ class rcube_sieve_script
             case 'fileinto':
             case 'redirect':
                 $action  = ['type' => $token, 'target' => array_pop($tokens)];
-                $args    = ['copy'];
+                $args    = ['copy','create'];
                 $action += $this->action_arguments($tokens, $args);
 
                 $result[] = $action;

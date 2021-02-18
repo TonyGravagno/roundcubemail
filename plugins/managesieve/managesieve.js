@@ -792,7 +792,7 @@ function action_type_select(id)
   if (v == 'fileinto' || v == 'fileinto_copy') {
     enabled.mailbox = 1;
   }
-  else if (v == 'redirect' || v == 'redirect_copy') {
+  else if (v == 'redirect' || v == 'redirect_copy' || v == 'fileinto_create') { // temporarily allow raw text for fileinto_create folder path
     enabled.target = 1;
   }
   else if (v.match(/^reject|ereject$/)) {

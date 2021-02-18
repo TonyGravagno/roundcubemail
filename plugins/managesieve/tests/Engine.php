@@ -32,7 +32,7 @@ class Managesieve_Engine extends ActionTestCase
 
         setProperty($engine, 'exts', ['copy', 'currentdate', 'date', 'duplicate',
             'editheader', 'enotify', 'envelope', 'fileinto', 'imap4flags', 'index',
-            'mime', 'regex', 'reject', 'relational', 'spamtest', 'subaddress',
+            'mailbox','mime', 'regex', 'reject', 'relational', 'spamtest', 'subaddress',
             'vacation', 'vacation-seconds', 'variables']);
 
         $result = $engine->filter_form([]);
